@@ -1,0 +1,63 @@
+<html>
+<head>
+	<title>主页</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/vue.resource/1.2.0/vue-resource.min.js"></script>	
+        <script>
+                window.onload=function(){
+                   var  xm =   new Vue({
+                                el:'#box',
+                                data:{
+                                        myData:[],
+                                },
+                                methods:{
+                                        get:function(){
+                                                this.$http.post('api/run/do.action').then(function(res){
+                                                        this.myData=res.data;
+                                                        console.log(this.myData);
+                                                });
+                                            }
+                                }
+                        });
+                   xm.get();
+                };
+        </script>    
+</head>
+<body>
+<div class="container" id="box">
+        <form role="form">
+                <div class="form-group">
+                        <input type="button" value="查看" class="btn btn-success" @click="get()">
+                </div>
+        </form>
+        <hr>
+        <table class="table table-bordered table-hover">
+                <caption class="h2 text-info text-center">信息表</caption>
+                <tr class="text-danger">
+                        <th class="text-center">主机</th>
+                        <th class="text-center">归属人</th>
+                        <th class="text-center">操作系统</th>
+                        <th class="text-center">功能</th>
+                </tr>
+                <tr class="text-center" v-for="item in myData.data">
+                        <td>{{ item.host }}</td>
+                        <td>{{ item.owner }}</td>
+                        <td>{{ item.os }}</td>
+                        <td>{{ item.desc }}</td>
+                </tr>
+                <tr v-show="myData.length==0">
+                        <td colspan="4" class="text-center text-muted">
+                                <p>暂无数据...</p>
+                        </td>
+                </tr>
+        </table>
+
+</div>
+</body>
+</html>
+
+
